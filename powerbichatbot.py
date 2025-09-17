@@ -11,24 +11,26 @@ import streamlit_highcharts as hct
 from google.oauth2 import service_account
 from google.cloud import aiplatform
 
+gcp = st.secrets["gcp"]
 creds = service_account.Credentials.from_service_account_info(
-    st.secrets["GOOGLE_CLOUD_SERVICE_ACCOUNT"]
+    dict(st.secrets["gcp_service_account"])
 )
 
 aiplatform.init(
-    project=st.secrets["GOOGLE_CLOUD_PROJECT"],
-    location=st.secrets["GOOGLE_CLOUD_LOCATION"],
+    project=gcp["GOOGLE_CLOUD_PROJECT"],
+    location=gcp["GOOGLE_CLOUD_LOCATION"],
     credentials=creds,
 )
 
 # Setting up Vertex Agent
 vertexai.init(
-    project=st.secrets["GOOGLE_CLOUD_PROJECT"],
-    location=st.secrets["GOOGLE_CLOUD_LOCATION"],
-    staging_bucket=st.secrets["GOOGLE_CLOUD_STAGING_BUCKET"],
+    project=gcp["GOOGLE_CLOUD_PROJECT"],
+    location=gcp["GOOGLE_CLOUD_LOCATION"],
+    staging_bucket=gcp["GOOGLE_CLOUD_STAGING_BUCKET"],
     credentials=creds
 )
-remote_app = agent_engines.get(st.secrets["AGENT_RESOURCE_ID"])
+agent = st.secrets["agent"]
+remote_app = agent_engines.get(agent["AGENT_RESOURCE_ID"])
 user_id = "user"
  
 # Global Constants
@@ -207,6 +209,7 @@ if prompt:
                     st.dataframe(table)
             st.session_state.sessions[st.session_state.current_session]["messages"].append({"role": "assistant", 
                                                         "content": text, "graphs": graphs, "cost": cost, "time": tt})
+
 
 
 
