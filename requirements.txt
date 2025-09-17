@@ -1,3 +1,4 @@
 vertexai
 pandas
 google-cloud-aiplatform[agent_engines,adk]>=1.112
+streamlit-highcharts
