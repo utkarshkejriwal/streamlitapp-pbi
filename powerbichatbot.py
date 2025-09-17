@@ -8,29 +8,15 @@ import time
 from helpersv2 import *
 import re
 import streamlit_highcharts as hct
-from google.oauth2 import service_account
-from google.cloud import aiplatform
 
-gcp = st.secrets["gcp"]
-creds = service_account.Credentials.from_service_account_info(
-    dict(st.secrets["gcp_service_account"])
-)
-
-aiplatform.init(
-    project=gcp["GOOGLE_CLOUD_PROJECT"],
-    location=gcp["GOOGLE_CLOUD_LOCATION"],
-    credentials=creds,
-)
-
+load_dotenv(override=True)
 # Setting up Vertex Agent
 vertexai.init(
-    project=gcp["GOOGLE_CLOUD_PROJECT"],
-    location=gcp["GOOGLE_CLOUD_LOCATION"],
-    staging_bucket=gcp["GOOGLE_CLOUD_STAGING_BUCKET"],
-    credentials=creds
+    project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+    location=os.environ.get("GOOGLE_CLOUD_LOCATION"),
+    staging_bucket=os.environ.get("GOOGLE_CLOUD_STAGING_BUCKET"),
 )
-agent = st.secrets["agent"]
-remote_app = agent_engines.get(agent["AGENT_RESOURCE_ID"])
+remote_app = agent_engines.get(os.environ.get("AGENT_RESOURCE_ID"))
 user_id = "user"
  
 # Global Constants
@@ -209,6 +195,7 @@ if prompt:
                     st.dataframe(table)
             st.session_state.sessions[st.session_state.current_session]["messages"].append({"role": "assistant", 
                                                         "content": text, "graphs": graphs, "cost": cost, "time": tt})
+
 
 
 
