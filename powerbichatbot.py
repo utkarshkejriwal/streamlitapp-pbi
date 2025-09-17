@@ -12,11 +12,11 @@ import streamlit_highcharts as hct
 load_dotenv(override=True)
 # Setting up Vertex Agent
 vertexai.init(
-    project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
-    location=os.environ.get("GOOGLE_CLOUD_LOCATION"),
-    staging_bucket=os.environ.get("GOOGLE_CLOUD_STAGING_BUCKET"),
+    project=st.secrets["GOOGLE_CLOUD_PROJECT"],
+    location=st.secrets["GOOGLE_CLOUD_LOCATION"],
+    staging_bucket=st.secrets["GOOGLE_CLOUD_STAGING_BUCKET"],
 )
-remote_app = agent_engines.get(os.environ.get("AGENT_RESOURCE_ID"))
+remote_app = agent_engines.get(st.secrets["AGENT_RESOURCE_ID"])
 user_id = "user"
  
 # Global Constants
@@ -195,4 +195,5 @@ if prompt:
                     st.dataframe(table)
             st.session_state.sessions[st.session_state.current_session]["messages"].append({"role": "assistant", 
                                                         "content": text, "graphs": graphs, "cost": cost, "time": tt})
+
 
