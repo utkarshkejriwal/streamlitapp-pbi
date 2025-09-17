@@ -16,7 +16,7 @@ vertexai.init(
     location=os.environ.get("GOOGLE_CLOUD_LOCATION"),
     staging_bucket=os.environ.get("GOOGLE_CLOUD_STAGING_BUCKET"),
 )
-remote_app = agent_engines.get("3021954932384202752")
+remote_app = agent_engines.get(os.environ.get("AGENT_RESOURCE_ID"))
 user_id = "user"
  
 # Global Constants
@@ -195,3 +195,4 @@ if prompt:
                     st.dataframe(table)
             st.session_state.sessions[st.session_state.current_session]["messages"].append({"role": "assistant", 
                                                         "content": text, "graphs": graphs, "cost": cost, "time": tt})
+
